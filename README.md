@@ -10,8 +10,8 @@ The script is always listening for the mouse position and it transforms that int
 
 ## Installation
 
-To run the script, just open the file run.bat. You must have Python installed in your computer.\\
-You can modify `"master_key"` key for turning on or off the script. Currently, it doesn't support key combinations such as shift+s.\
+To run the script, just open the file run.bat. You must have Python installed in your computer.\
+You can modify `"master_key"` key for turning on or off the script. Currently, it doesn't support key combinations such as shift+s.
 
 ```javascript
 // config.json
