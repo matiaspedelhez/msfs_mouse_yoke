@@ -38,9 +38,10 @@ def throttle(x, y, dx, dy):
         if currentThrottleStep > 0 and dy == -1:
             currentThrottleStep += dy
         
-        stepsToFloatTrigger = currentThrottleStep / maxSteps
+        stepsToFloat = currentThrottleStep / (maxSteps / 2) - 1
 
-        gamepad.right_trigger_float(value_float=stepsToFloatTrigger)
+        print(stepsToFloat)
+        gamepad.right_joystick_float(x_value_float=stepsToFloat, y_value_float=0)
         gamepad.update()
 
 
