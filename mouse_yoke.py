@@ -1,44 +1,66 @@
-import pyautogui as pygui
+from pyautogui import size, moveTo
 import vgamepad as vg
-import keyboard
-import time
+from pynput import mouse, keyboard
 import json
-import os
 
 with open("./config.json") as config_file:
     configs = json.load(config_file)
 
 gamepad = vg.VX360Gamepad()
-screen_size = pygui.size()
+screen_size = size()
+maxSteps = configs['throttle_sensitivity']
+currentThrottleStep = 0
+pixelsToFloatX = 0.0
+pixelsToFloatY = 0.0
+active = False
 
 
-def mouseYoke():
-    active = True
-    pygui.moveTo(screen_size.width / 2, screen_size.height / 2)
+def mouseYoke(x, y):
+    global pixelsToFloatX
+    global pixelsToFloatY
 
-    os.system('cls')
-    print(" ## Mouse Yoke init ##\nPress '{}' to turn on and off the script.".format(configs["master_key"]))
-
-    while True:
-        [x, y] = pygui.position()
-
-        if active:
+    if active:
+        if x >= 0 and x <= screen_size.width:
             pixelsToFloatX = x / (screen_size.width / 2) - 1
+        if y >= 0 and y <= screen_size.height:
             pixelsToFloatY = y / (screen_size.height / 2) - 1
 
-            gamepad.left_joystick_float(x_value_float=pixelsToFloatX, y_value_float=pixelsToFloatY)
-            gamepad.update()
+        gamepad.left_joystick_float(x_value_float=pixelsToFloatX, y_value_float=pixelsToFloatY)
+        gamepad.update()
 
-        if(keyboard.is_pressed(configs["master_key"])):
-            active = not active
 
-            os.system('cls')
-            print("Mouse Yoke is now {}! Switch using key/hotkey '{}'".format("active" if active else "inactive", configs["master_key"]))
-            
-            time.sleep(0.1)
+def throttle(x, y, dx, dy):
+    global currentThrottleStep
+    
+    if active:
+        if currentThrottleStep < maxSteps and dy == 1:
+            currentThrottleStep += dy
+        if currentThrottleStep > 0 and dy == -1:
+            currentThrottleStep += dy
+        
+        stepsToFloatTrigger = currentThrottleStep / maxSteps
 
-        time.sleep(0.001) # for performance issues
+        gamepad.right_trigger_float(value_float=stepsToFloatTrigger)
+        gamepad.update()
 
+
+def onKeyRelease(key):
+    global active
+
+    if key == keyboard.KeyCode.from_char(configs["master_key"]):
+        active = not active
+        if active: moveTo(screen_size.width / 2, screen_size.height / 2)
+        print("Yoke is {}!".format("active" if active else "inactive"))
+        
 
 if __name__ == "__main__":
-    mouseYoke()
+    ms = mouse.Listener(
+        on_move=mouseYoke,
+        on_scroll=throttle)
+    kb = keyboard.Listener(
+        on_release=onKeyRelease
+    )
+    ms.start()
+    kb.start()
+    ms.join()
+    kb.join()
