@@ -1,3 +1,4 @@
 pynput==1.7.6
 vgamepad==0.0.6
 pyautogui==0.9.53
+reprint==0.6.0

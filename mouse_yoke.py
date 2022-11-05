@@ -10,15 +10,16 @@ import time
 with open("./config.json") as config_file:
     configs = json.load(config_file)
 
+
 gamepad = vg.VX360Gamepad()
 screen_size = size()
 maxSteps = configs['throttle_sensitivity']
-active = False
 currentThrottleStep = 0
 pixelsToFloatX = 0.0
 pixelsToFloatY = 0.0
 global_x = 0
 global_y = 0
+active = False
 
 
 def mouseYoke(x, y):
