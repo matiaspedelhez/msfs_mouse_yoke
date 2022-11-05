@@ -1,7 +1,11 @@
 from pyautogui import size, moveTo
-import vgamepad as vg
 from pynput import mouse, keyboard
+from reprint import output
+from threading import Thread
+import vgamepad as vg
 import json
+import time
+
 
 with open("./config.json") as config_file:
     configs = json.load(config_file)
@@ -9,16 +13,21 @@ with open("./config.json") as config_file:
 gamepad = vg.VX360Gamepad()
 screen_size = size()
 maxSteps = configs['throttle_sensitivity']
+active = False
 currentThrottleStep = 0
 pixelsToFloatX = 0.0
 pixelsToFloatY = 0.0
-active = False
+global_x = 0
+global_y = 0
 
 
 def mouseYoke(x, y):
-    global pixelsToFloatX
-    global pixelsToFloatY
+    global pixelsToFloatX, pixelsToFloatY
+    global global_x, global_y
 
+    global_x = x
+    global_y = y
+    
     if active:
         if x >= 0 and x <= screen_size.width:
             pixelsToFloatX = x / (screen_size.width / 2) - 1
@@ -31,7 +40,7 @@ def mouseYoke(x, y):
 
 def throttle(x, y, dx, dy):
     global currentThrottleStep
-    
+     
     if active:
         if currentThrottleStep < maxSteps and dy == 1:
             currentThrottleStep += dy
@@ -40,7 +49,6 @@ def throttle(x, y, dx, dy):
         
         stepsToFloat = currentThrottleStep / (maxSteps / 2) - 1
 
-        print(stepsToFloat)
         gamepad.right_joystick_float(x_value_float=stepsToFloat, y_value_float=0)
         gamepad.update()
 
@@ -51,17 +59,36 @@ def onKeyRelease(key):
     if key == keyboard.KeyCode.from_char(configs["master_key"]):
         active = not active
         if active: moveTo(screen_size.width / 2, screen_size.height / 2)
-        print("Yoke is {}!".format("active" if active else "inactive"))
-        
+
+
+def userInterface():
+    with output(initial_len=8, interval=0) as output_lines:
+        while True:
+
+            output_lines[0] = f"+{' Status: ' + ('ACTIVE' if active else 'INACTIVE') + ' ':—^60}+"
+            output_lines[1] = f"|{'':^60}|"
+            output_lines[2] = f"|{'Axis':^20}{'Raw input':^20}{'Conversion':^20}|"
+            output_lines[3] = f"+{'':—^60}+"
+            output_lines[4] = f"|{'X':^20}{global_x:^20}{'{:.2f}'.format((pixelsToFloatX + 1) * 50) + '%':^20}|"
+            output_lines[5] = f"|{'Y':^20}{global_y:^20}{'{:.2f}'.format((pixelsToFloatY + 1) * 50) + '%':^20}|"
+            output_lines[6] = f"|{'THROTTLE':^20}{currentThrottleStep:^20}{'{:.2f}'.format((currentThrottleStep * 100 / configs['throttle_sensitivity'])) + '%':^20}|"
+            output_lines[7] = f"+{'':—^60}+"
+
+            time.sleep(0.05)
+
 
 if __name__ == "__main__":
+    ui = Thread(target=userInterface)
     ms = mouse.Listener(
         on_move=mouseYoke,
         on_scroll=throttle)
     kb = keyboard.Listener(
         on_release=onKeyRelease
     )
+    
     ms.start()
     kb.start()
+    ui.start()
+    
     ms.join()
     kb.join()
