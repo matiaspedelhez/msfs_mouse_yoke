@@ -3,6 +3,8 @@ from pynput import mouse, keyboard
 from reprint import output
 from threading import Thread
 import vgamepad as vg
+import logging
+import sys
 import json
 import time
 
@@ -11,9 +13,10 @@ with open("./config.json") as config_file:
     configs = json.load(config_file)
 
 
+logging.basicConfig(filename=f"./logs/{sys.argv[1]}", format="%(asctime)s - %(message)s")
 gamepad = vg.VX360Gamepad()
 screen_size = size()
-maxSteps = configs['throttle_sensitivity']
+
 currentThrottleStep = 0
 pixelsToFloatX = 0.0
 pixelsToFloatY = 0.0
@@ -43,12 +46,12 @@ def throttle(x, y, dx, dy):
     global currentThrottleStep
      
     if active:
-        if currentThrottleStep < maxSteps and dy == 1:
+        if currentThrottleStep < configs['throttle_sensitivity'] and dy == 1:
             currentThrottleStep += dy
         if currentThrottleStep > 0 and dy == -1:
             currentThrottleStep += dy
         
-        stepsToFloat = currentThrottleStep / (maxSteps / 2) - 1
+        stepsToFloat = currentThrottleStep / (configs['throttle_sensitivity'] / 2) - 1
 
         gamepad.right_joystick_float(x_value_float=stepsToFloat, y_value_float=0)
         gamepad.update()
@@ -79,17 +82,18 @@ def userInterface():
 
 
 if __name__ == "__main__":
-    ui = Thread(target=userInterface)
-    ms = mouse.Listener(
-        on_move=mouseYoke,
-        on_scroll=throttle)
-    kb = keyboard.Listener(
-        on_release=onKeyRelease
-    )
-    
-    ms.start()
-    kb.start()
-    ui.start()
-    
-    ms.join()
-    kb.join()
+    logging.warning("mouse_yoke.py is now running\n\n")
+
+    try:
+        ui = Thread(target=userInterface)
+        ms = mouse.Listener(on_move=mouseYoke, on_scroll=throttle)
+        kb = keyboard.Listener(on_release=onKeyRelease)
+        
+        ms.start()
+        kb.start()
+        ui.start()
+        ms.join()
+        kb.join()
+
+    except Exception as e:
+        logging.critical("Exception occurred", exc_info=True)
