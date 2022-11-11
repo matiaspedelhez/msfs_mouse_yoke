@@ -1,11 +1,16 @@
 @echo off
 
-for /f "tokens=2-8 delims=.:/ " %%a in ("%date% %time%") do set DateNtime=%%c-%%a-%%b_%%d-%%e-%%f.%%g
-
 if not exist "./logs" mkdir logs
 
-set LOGFILE=%~dp0logs\%DateNtime%.log
+for /F "tokens=*" %%i in ('PowerShell -Command "& {Get-Date -Format FileDateTime}"') do (
+    SET DATE_TIME=%%i
+)
+
+set LOGFILE=%~dp0logs\%DATE_TIME%.log
 echo BATCH file init > %LOGFILE%
+
+python --version 2 > nul
+if errorlevel 1 goto NOPYTHON
 
 echo Trying to update pip... >> %LOGFILE%
 python -m pip install --upgrade pip >> %LOGFILE%
@@ -14,6 +19,11 @@ echo Trying to install dependencies... >> %LOGFILE%
 pip install -r ./requirements.txt >> %LOGFILE%
 
 echo Running mouse_yoke.py... >> %LOGFILE%
-python ./mouse_yoke.py %DateNtime%.log
+python ./mouse_yoke.py %DATE_TIME%.log
 
 exit /b 0
+
+:NOPYTHON
+echo Error^: Python is not installed or it's not reachable. If you believe you have Python installed, check your PATH settings.
+echo FATAL: PYTHON IS NOT INSTALLED >> %LOGFILE%
+pause
