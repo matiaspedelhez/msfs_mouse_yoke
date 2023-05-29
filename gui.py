@@ -8,6 +8,3 @@ customtkinter.set_default_color_theme("blue")
 app = customtkinter.CTk()
 app.geometry("720x480")
 app.title("MouseYoke MOD by @matiaspedelhez")
-
-# ui elements
-status = customtkinter.CTkLabel(app, text="Running")

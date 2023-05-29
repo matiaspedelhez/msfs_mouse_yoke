@@ -18,7 +18,7 @@ class MouseController:
         self.screen_size = {"width": 0, "height": 0}
         self.mouse_instance = None
         self.keyboard_instance = None
-        self.__on_progress_callback = None
+        self.__on_update_callback = None
 
         self.__loop(self.__mouseMovementCallback, self.__scrollwheelCallback)
         self.__getScreenSize()
@@ -40,15 +40,20 @@ class MouseController:
         if self.status == "Running":
             self.gamepad.left_joystick_float(x_value_float=self.transformed_position_x, y_value_float=self.transformed_position_y)
             self.gamepad.update()
-            self.__on_progress_callback()
-            
+            try:
+                self.__on_update_callback()
+            except:
+                pass
     def __scrollwheelCallback(self, x, y, dx, dy):
         self.__transformRawScroll(20, dy)
 
         if self.status == "Running":
             self.gamepad.right_joystick_float(x_value_float=self.transformed_scrollwheel, y_value_float=0)
             self.gamepad.update()
-            self.__on_progress_callback()
+            try:
+                self.__on_update_callback()
+            except:
+                pass
 
     def __getScreenSize(self):
         # get width and height of screen (includes multiple monitors)
@@ -77,6 +82,10 @@ class MouseController:
             return
         
         self.status = "Running"
+        try:
+            self.__on_update_callback()
+        except:
+            pass
         logging.info("MouseController is now running.")
 
     def pause(self):
@@ -85,13 +94,23 @@ class MouseController:
             return
         else:
             self.status = "Paused"
+            try:
+                self.__on_update_callback()
+            except:
+                pass
             logging.info("MouseController is now paused.")   
 
     def onUpdate(self, on_update_callback):
-        self.__on_progress_callback = on_update_callback
+        self.__on_update_callback = on_update_callback
 
     def forceStop(self):
         # deleting instance of pynput
-        logging.warning("Force stopping mouse and keyboard listeners.")
         del self.mouse_instance
         del self.keyboard_instance 
+        logging.warning("Force stopping mouse and keyboard listeners.")
+
+        self.status = "Stopped"
+        try:
+            self.__on_update_callback()
+        except:
+            pass
