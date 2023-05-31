@@ -24,6 +24,10 @@ global_x = 0
 global_y = 0
 active = False
 
+# init the variables to center of the screen
+last_x_position = 0
+last_y_position = 0
+
 
 def mouseYoke(x, y):
     global pixelsToFloatX, pixelsToFloatY
@@ -59,11 +63,34 @@ def throttle(x, y, dx, dy):
 
 def onKeyRelease(key):
     global active
+    global last_x_position
+    global last_y_position
 
     if key == keyboard.KeyCode.from_char(configs["master_key"]):
-        active = not active
-        if active: moveTo(screen_size.width / 2, screen_size.height / 2)
+        if active:
+            # getting deactivated
+            last_x_position = global_x
+            last_y_position = global_y
 
+        active = not active
+
+        if configs["remember_last_position"]:
+            # return to last position
+            if active: moveTo(last_x_position, last_y_position)
+            mouseYoke(last_x_position, last_y_position)
+            
+        if not configs["remember_last_position"]:
+            # return to center
+            if active: moveTo(screen_size.width / 2, screen_size.height / 2)
+            mouseYoke(screen_size.width / 2, screen_size.height / 2)
+
+    
+    if key == keyboard.KeyCode.from_char(configs["center_xy_axes_key"]):
+        moveTo(screen_size.width / 2, screen_size.height / 2)
+
+        if active:
+            mouseYoke(screen_size.width / 2, screen_size.height / 2)
+        
 
 def userInterface():
     with output(initial_len=8, interval=0) as output_lines:
