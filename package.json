@@ -1,0 +1,16 @@
+{
+  "name": "mouse_yoke",
+  "productName": "Mouse Yoke",
+  "version": "1.0.0",
+  "description": "use your mouse as a yoke in msfs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Matias Pedelhez",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^25.0.0",
+    "python-shell": "^5.0.0"
+  }
+}
