@@ -70,5 +70,5 @@ if __name__ == "__main__":
     mouse_controller.run()
 
     # communicate back and forth with Node.js
-    # threading.Thread(target=lambda: listenForCommands(mouse_controller)).start()
+    threading.Thread(target=lambda: listenForCommands(mouse_controller)).start()
     threading.Thread(target=sendStatus).start()
