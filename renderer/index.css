@@ -1,0 +1,10 @@
+.statusBar {
+    width: 100%;
+    background-color: grey;
+}
+.statusBarProgress {
+    width: 1%;
+    height: 30px;
+    background-color: green;
+    transition: 100ms linear;
+}

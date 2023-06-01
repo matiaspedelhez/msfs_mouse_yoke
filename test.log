@@ -1,0 +1,25 @@
+2023-06-01 20:23:13,844:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:23:13,844:PY::86:INFO - MouseController is now running.
+2023-06-01 20:23:14,047:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:23:14,048:PY::86:INFO - MouseController is now running.
+2023-06-01 20:47:21,811:PY::31:INFO - Request received: PAUSE
+2023-06-01 20:47:21,811:PY::95:INFO - MouseController is now paused.
+2023-06-01 20:47:22,128:PY::31:INFO - Request received: RUN
+2023-06-01 20:47:22,128:PY::86:INFO - MouseController is now running.
+2023-06-01 20:47:39,818:PY::31:INFO - Request received: PAUSE
+2023-06-01 20:47:39,818:PY::95:INFO - MouseController is now paused.
+2023-06-01 20:47:48,913:PY::31:INFO - Request received: RUN
+2023-06-01 20:47:48,914:PY::86:INFO - MouseController is now running.
+2023-06-01 20:48:29,805:PY::28:CRITICAL - eval() arg 1 must be a string, bytes or code object
+2023-06-01 20:48:29,805:PY::31:INFO - Request received: RUN
+2023-06-01 20:48:29,805:PY::82:WARNING - Cannot start MouseController: it is already running.
+2023-06-01 20:48:39,784:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:48:39,784:PY::86:INFO - MouseController is now running.
+2023-06-01 20:48:39,952:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:48:39,952:PY::86:INFO - MouseController is now running.
+2023-06-01 20:49:17,293:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:49:17,293:PY::86:INFO - MouseController is now running.
+2023-06-01 20:49:17,470:PY::59:DEBUG - {'width': 1920, 'height': 1080}
+2023-06-01 20:49:17,470:PY::86:INFO - MouseController is now running.
+2023-06-01 20:49:54,549:PY::28:CRITICAL - invalid syntax (<string>, line 0)
+2023-06-01 20:49:54,549:PY::28:CRITICAL - invalid syntax (<string>, line 0)

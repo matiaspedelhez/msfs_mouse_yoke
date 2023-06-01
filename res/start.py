@@ -4,9 +4,10 @@ import sys
 import time
 import logging
 import threading
+import json
 
 FORMAT = '%(asctime)s:PY::%(lineno)d:%(levelname)s - %(message)s'
-logging.basicConfig(level=logging.DEBUG, encoding='utf-8', filename="./logs/test.log", format=FORMAT)
+logging.basicConfig(level=logging.DEBUG, encoding='utf-8', filename="./test.log", format=FORMAT)
 log = logging.getLogger(__name__)
 
 def listenForCommands(mouse_controller):
@@ -46,8 +47,8 @@ def sendStatus():
     # send commands to std by printing them - later grabbed by Nodejs
     while True:
         time.sleep(0.1)
-        print(
-            {
+        
+        print(json.dumps([{
                 "type": "mouse_controller_data",
                 "data": {
                     "raw_x": mouse_controller.raw_position_x,
@@ -56,9 +57,9 @@ def sendStatus():
                     "mc_status": mouse_controller.status,
                     "transformed_x": mouse_controller.transformed_position_x,
                     "transformed_y": mouse_controller.transformed_position_y,
-                    "transformed_wheel": mouse_controller.transformed_scrollwheel,
-                },
-            },
+                    "transformed_wheel": mouse_controller.transformed_scrollwheel
+                }
+            }], separators=(',', ':')),
             end="",
             flush=True,
         )

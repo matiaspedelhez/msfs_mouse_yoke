@@ -5,10 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="index.css">
     <script src="./script.js" rel="preload"></script>
 </head>
 <body>
-    <p>hello</p>
+    <div class="status">
+        <p class="status-text">Status: 
+            <span id="status-value"></span>
+        </p>
+    </div>
+
+    <div class="statusBar">
+        <div id="status-position-x" class="statusBarProgress"></div>
+    </div>
+    
     <button onclick="run();">Run</button>
     <button onclick="stop();">Stop</button>
 </body>

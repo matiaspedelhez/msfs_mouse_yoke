@@ -1,51 +1,39 @@
 const path = require('path');
-const {app, BrowserWindow, ipcMain, win} = require('electron');
-const {requestRun, requestPause} = require("./actions.js")
-const { PythonShell } = require('python-shell');
+const {app, BrowserWindow, ipcMain, MessageChannelMain} = require('electron');
+const {pythonProcess} = require("./pyProcess.js")
 
-let pyshell = new PythonShell('./res/start.py', ["-u"]);
-
-function createWindow() {
+async function createWindow() {
     const mainWindow = new BrowserWindow({
-        title: 'Mouse Yoke MOD by @matiaspedelhez', width:800, height: 500,
+        title: 'Mouse Yoke MOD by @matiaspedelhez', width:1120, height: 720,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+            sandbox: false,
+            preload: path.join(__dirname, "./preload.js"),
           }
     });
+    await mainWindow.loadFile(path.join(__dirname, './renderer/index.html'))
 
-    ipcMain.handle('requestRun', () => requestRun(pyshell))
-    ipcMain.handle('requestStop', () => requestStop(pyshell))
-    ipcMain.handle('requestPause', () => requestPause(pyshell))
-    ipcMain.handle('requestChangeMasterKey', (key) => actions.requestChangeMasterKey(pyshell, key))
-    ipcMain.handle('requestChangeThrottleSensitivity', (newSensitivity) => actions.requestChangeThrottleSensitivity(pyshell, newSensitivity))
-
-    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'))
+    return mainWindow;
 }
 
-app.whenReady().then( () => {
-    createWindow()
+function sendStatusMessages(mainWindow) {
+  if (pythonProcess) {
+    pythonProcess.stdout.on("data", function(data) {
+      mainWindow.webContents.postMessage('controller_status', data);
+    });
+  }
+}
 
+app.whenReady().then(async () => {
+    const mainWindow = await createWindow();
+    sendStatusMessages(mainWindow);
+  
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows() === 0){
-            createWindow()
+            createWindow();
         }
     })
 
-    // pythonProcess = spawn('python',["-u", path.join(__dirname, './res/start.py')]);
-    // console.log(path.join(__dirname, './res/start.py'))
-    // pythonProcess.stdout.on('data', (data) => {
-    //     console.log(data.toString())
-    // });
-  //   pyshell.stdout.on("data", function(data) {
-  //     win.webContents.send('mouse_controller_data', data)
-  // })
-    pyshell.end(function (err) {
-      if (err){
-        throw err;
-      };
-      console.log('finished');
-    });
-    
-    
+    app.on('quit', () => {
+      process.exit();
+    })
 })
