@@ -1,0 +1,20 @@
+.LeftSide {
+    background-color: hsla(0, 0%, 56%, 0.25);
+    backdrop-filter: blur(3px); 
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 48px;
+    background-color: hsla(0, 0%, 0%, 0.15);
+    margin: 2px;
+    color: white;
+}
+
+.title p {
+    padding-left: 12px;
+    font-size: 20px;
+    font-weight: 600;
+}

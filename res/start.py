@@ -7,7 +7,7 @@ import threading
 import json
 
 FORMAT = '%(asctime)s:PY::%(lineno)d:%(levelname)s - %(message)s'
-logging.basicConfig(level=logging.DEBUG, encoding='utf-8', filename="./test.log", format=FORMAT)
+logging.basicConfig(level=logging.DEBUG, encoding='utf-8', filename=f"./logs/{sys.argv[1]}.log", format=FORMAT)
 log = logging.getLogger(__name__)
 
 def listenForCommands(mouse_controller):

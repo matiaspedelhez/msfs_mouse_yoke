@@ -3,14 +3,58 @@
   "productName": "Mouse Yoke",
   "version": "1.0.0",
   "description": "use your mouse as a yoke in msfs",
-  "main": "main.js",
+  "main": "public/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "concurrently \"npm run react\" \"npm run electron\"",
+    "electron": "electron .",
+    "react": "cross-env BROWSER=none react-scripts start"
+  },
+  "build": {
+    "extraResources": [
+      {
+        "from": "python",
+        "to": "python",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   },
   "author": "Matias Pedelhez",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "license": "MIT",
   "dependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^8.1.0",
+    "cross-env": "^7.0.3",
+    "date-and-time": "^3.0.0",
     "electron": "^25.0.0",
-    "python-shell": "^5.0.0"
+    "electron-builder": "^23.6.0",
+    "electron-is-dev": "^2.0.0",
+    "python-shell": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "wait-on": "^7.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

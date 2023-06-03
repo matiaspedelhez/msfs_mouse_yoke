@@ -1,0 +1,50 @@
+body { 
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.App{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#background {
+  width: 105%;
+  height: 105%;
+  filter: brightness(0.85);
+  position: absolute;
+}
+
+#main-container{
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1.33fr 1fr;
+  grid-row-gap: 8px;
+}
+
+#top-section{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.25fr 2fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 8px;
+}
+
+#bottom-section {
+
+}

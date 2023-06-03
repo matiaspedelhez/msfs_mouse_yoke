@@ -1,0 +1,5 @@
+.BottomSide {
+    background-color: #90909040;
+    backdrop-filter: blur(3px); 
+    height: 100%;
+}

@@ -1,0 +1,45 @@
+.ConfigurationButtonKeySelector{
+    height: 26px;
+    display: flex;
+    justify-content: space-between;
+    margin: 2px;
+    padding: 2px;
+    align-items: center;
+    color: white;
+    background-color: #9090908f;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.short-description{
+    padding-left: 4px;
+}
+
+input {
+    all: unset;
+  }
+
+.input-field{
+    width: 132px;
+    height: 26px;
+    background-color: #404751;
+    margin: 0;
+    padding: 0;
+    border: 1px solid;
+    border-color: #4287A8;
+    color: white;
+    transition: 100ms;
+    caret-color: transparent;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-field:focus{
+    border: 1px solid;
+    border-color: #000000;
+    background-color: white;
+    color:black;
+}
