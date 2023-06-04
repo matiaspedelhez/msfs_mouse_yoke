@@ -1,0 +1,8 @@
+# Settings for Mouse Controller
+- settings:
+    - keybinds:
+        master: "."
+        center_axis: ","
+    - parameters:
+        throttle_sensitivity: "20"
+        remember_last_position: true

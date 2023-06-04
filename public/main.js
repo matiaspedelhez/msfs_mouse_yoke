@@ -4,6 +4,9 @@ const { PythonShell } = require("python-shell");
 const date = require("date-and-time");
 const path = require("path");
 const isDev = require("electron-is-dev");
+const readFile = require("./liveLogReader.js");
+
+const CHANNEL_NAME = "main";
 
 // Retrieve date for log naming
 const now = new Date();
@@ -35,7 +38,7 @@ async function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
-  mainWindow.setMenuBarVisibility(false);
+  // mainWindow.setMenuBarVisibility(false);
   mainWindow.on("closed", () => (mainWindow = null));
 
   // Expose Python Functions
@@ -48,9 +51,23 @@ function sendStatusMessages(mainWindow) {
   });
 }
 
+// Expose generated log name
+// ipcMain.on(CHANNEL_NAME, (event, request) => {
+//   console.log(request);
+//   event.sender.send("get_logfile_name", logName);
+// });
+
 app.whenReady().then(() => {
   createWindow();
   sendStatusMessages(mainWindow);
+
+  mainWindow.on("ready-to-show", () => {
+    // Send log name to renderer after 1 second
+    const interval = setInterval(() => {
+      readFile(path.join(__dirname, `../logs/${logName}.log`), mainWindow);
+      clearInterval(interval);
+    }, 1000);
+  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows() === 0) {

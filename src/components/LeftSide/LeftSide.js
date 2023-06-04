@@ -8,7 +8,7 @@ function LeftSide() {
       <div className="title">
         <p>{"> "}MOUSEYOKE MSFS</p>
       </div>
-      <div className="configutarion-items">
+      <div className="configutaration-items">
         <ConfigurationButtonKeySelector
           shortDescription={"ON/OFF KEYBIND"}
           callback={{}}
@@ -21,6 +21,9 @@ function LeftSide() {
           shortDescription={"THROTTLE SENSITIVITY"}
           callback={{}}
         />
+        <button onClick={() => window.pythonFunctions.requestRun()}>
+          Start
+        </button>
       </div>
     </div>
   );

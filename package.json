@@ -2,7 +2,7 @@
   "name": "mouse_yoke",
   "productName": "Mouse Yoke",
   "version": "1.0.0",
-  "description": "use your mouse as a yoke in msfs",
+  "description": "Use your mouse as a yoke in msfs",
   "main": "public/main.js",
   "scripts": {
     "start": "concurrently \"npm run react\" \"npm run electron\"",
@@ -42,6 +42,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "tail": "^2.2.6",
     "wait-on": "^7.0.1",
     "web-vitals": "^2.1.4"
   },
