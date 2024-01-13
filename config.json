@@ -2,5 +2,6 @@
     "master_key": ",",
     "throttle_sensitivity": 20,
     "remember_last_position": true,
-    "center_xy_axes_key": "."
+    "center_xy_axes_key": ".",
+    "display_gui": true
 }

@@ -1,4 +1,6 @@
 from pyautogui import size, moveTo
+import pyautogui
+
 from pynput import mouse, keyboard
 from reprint import output
 from threading import Thread
@@ -145,6 +147,8 @@ class ColorDisplayApp:
 
 
 def runTK():
+    if(not configs['display_gui']):
+        return
     root = tk.Tk()
     app = ColorDisplayApp(root)
     root.mainloop()
@@ -153,6 +157,7 @@ if __name__ == "__main__":
     logging.warning("mouse_yoke.py is now running\n\n")
 
     try:
+        pyautogui.FAILSAFE = False
         ui = Thread(target=userInterface)
         ms = mouse.Listener(on_move=mouseYoke, on_scroll=throttle)
         kb = keyboard.Listener(on_release=onKeyRelease)
