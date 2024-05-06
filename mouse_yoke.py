@@ -1,4 +1,4 @@
-from pyautogui import size, moveTo
+from pyautogui import size, moveTo, getActiveWindow
 from pynput import mouse, keyboard
 from reprint import output
 from threading import Thread
@@ -60,13 +60,24 @@ def throttle(x, y, dx, dy):
         gamepad.right_joystick_float(x_value_float=stepsToFloat, y_value_float=0)
         gamepad.update()
 
+def isFocused():
+    title = getActiveWindow().title
+    width = getActiveWindow().width
+    height = getActiveWindow().height
+    
+    # Checking if the game is focused or not and if it's in fullscreen
+    if "Microsoft Flight Simulator" in title and width == screen_size.width and height == screen_size.height:
+        return True
+    else:
+        return False
 
 def onKeyRelease(key):
     global active
     global last_x_position
     global last_y_position
 
-    if key == keyboard.KeyCode.from_char(configs["master_key"]):
+    # Only executed when the game is focused
+    if key == keyboard.KeyCode.from_char(configs["master_key"]) and isFocused():
         if active:
             # getting deactivated
             last_x_position = global_x
@@ -85,7 +96,7 @@ def onKeyRelease(key):
             mouseYoke(screen_size.width / 2, screen_size.height / 2)
 
     
-    if key == keyboard.KeyCode.from_char(configs["center_xy_axes_key"]):
+    if key == keyboard.KeyCode.from_char(configs["center_xy_axes_key"]) and isFocused():
         moveTo(screen_size.width / 2, screen_size.height / 2)
 
         if active:
