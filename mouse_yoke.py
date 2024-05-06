@@ -25,8 +25,8 @@ global_y = 0
 active = False
 
 # init the variables to center of the screen
-last_x_position = 0
-last_y_position = 0
+last_x_position = screen_size.width / 2
+last_y_position = screen_size.height / 2
 
 
 def mouseYoke(x, y):
