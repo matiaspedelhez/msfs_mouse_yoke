@@ -1,6 +1,6 @@
 # msfs_mouse_yoke
 
-Warning: This proyect is no longer being maintained.
+Warning: This project is no longer being maintained.
 
 This is a small script written in Python that lets you fly with your mouse in Microsoft Flight Simulator 2020. (Why is this not implemented in the game yet?).
 
