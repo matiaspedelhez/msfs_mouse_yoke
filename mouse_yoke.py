@@ -1,4 +1,6 @@
 from pyautogui import size, moveTo
+import pyautogui
+
 from pynput import mouse, keyboard
 from reprint import output
 from threading import Thread
@@ -7,6 +9,7 @@ import logging
 import sys
 import json
 import time
+import tkinter as tk
 
 
 with open("./config.json") as config_file:
@@ -108,19 +111,65 @@ def userInterface():
             time.sleep(0.05)
 
 
+class ColorDisplayApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Mouse Yoke")
+        self.master.geometry("100x50")
+
+        self.namelabel = tk.Label(self.master, text="Mouse Yoke", font=('Consolas', 8) , anchor="center", justify="center")
+        self.label = tk.Label(self.master, text="", font=('Consolas', 16), anchor="center", justify="center")
+        self.namelabel.pack(pady=0)
+        self.label.pack(pady=0)
+
+        self.master.after(100, self.update_display)
+        
+        self.master.attributes('-topmost', True)
+        self.master.overrideredirect(True)
+
+
+    def update_display(self):
+        if active:
+            self.label.config(bg="red")
+            self.master.configure(bg="red")
+
+            self.label.config(text = "ACTIVE")
+            self.master.attributes('-alpha', 1)
+        else:
+            
+            self.label.config(bg="gray")
+            self.master.configure(bg="gray")
+
+            self.label.config(text = "")
+            self.master.attributes('-alpha', 0.5)
+        self.master.after(100, self.update_display)
+
+
+
+def runTK():
+    if(not configs['display_gui']):
+        return
+    root = tk.Tk()
+    app = ColorDisplayApp(root)
+    root.mainloop()
+
 if __name__ == "__main__":
     logging.warning("mouse_yoke.py is now running\n\n")
 
     try:
+        pyautogui.FAILSAFE = False
         ui = Thread(target=userInterface)
         ms = mouse.Listener(on_move=mouseYoke, on_scroll=throttle)
         kb = keyboard.Listener(on_release=onKeyRelease)
+        tl = Thread(target=runTK)
         
         ms.start()
         kb.start()
         ui.start()
+        tl.start()
         ms.join()
         kb.join()
+        tl.join()
 
     except Exception as e:
         logging.critical("Exception occurred", exc_info=True)
